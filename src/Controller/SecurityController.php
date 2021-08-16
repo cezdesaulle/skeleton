@@ -43,6 +43,39 @@ class SecurityController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/registrationPro",name="registrationPro")
+     */
+    public function registrationPro(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    {
+
+        $user = new User();
+
+        $form = $this->createForm(RegistrationType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()):
+
+            $user->setRoles(['ROLE_PRO']);
+            $mdp = $encoder->encodePassword($user, $request->request->get('registration')['password']);
+            $user->setPassword($mdp);
+            $manager->persist($user);
+            $manager->flush();
+            $this->addFlash('success', 'Félicitation! votre inscription s\'est bien déroulée. Connectez vous à présent');
+
+            return $this->redirectToRoute('login');
+        endif;
+
+
+        return $this->render('security/registrationPro.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+
+
     /**
      * @Route("/login", name="login")
      */
