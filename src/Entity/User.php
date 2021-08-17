@@ -89,6 +89,11 @@ class User implements  UserInterface
      */
     private $annonce;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $pro;
+
     public function __construct()
     {
         $this->annonce = new ArrayCollection();
@@ -187,13 +192,13 @@ class User implements  UserInterface
 
     public function getRoles(): ?array
     {
-       return $this->roles;
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self
     {
-            $this->roles=$roles;
-            return $this;
+        $this->roles=$roles;
+        return $this;
 
     }
     // renvoi la chaine de caractère saisie par l'utilisateur et non encodée, qu'il renvoi à l'encoder pour QU'IL PROCEDE AU HACHAGE
@@ -240,6 +245,18 @@ class User implements  UserInterface
                 $annonce->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPro(): ?int
+    {
+        return $this->pro;
+    }
+
+    public function setPro(int $pro): self
+    {
+        $this->pro = $pro;
 
         return $this;
     }
