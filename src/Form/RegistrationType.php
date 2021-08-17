@@ -50,16 +50,7 @@ class RegistrationType extends AbstractType
                 ]
             ])
             ->add("Valider", SubmitType::class)
-            ->add('birthdate',BirthdayType::class ,[
-                "widget"=>"choice",
-                'years'=>range(1950, 2021),
-                "format"=>"dd MM yyyy",
-                "required"=>false,
-                "label"=>false,
-                "html5"=>false,
-                "placeholder"=>['day'=>'jour', 'month'=>'Mois','year'=>'Année']
 
-            ])
             ->add('adress',TextType::class  ,[
                 "required"=>false,
                 "label"=>false,

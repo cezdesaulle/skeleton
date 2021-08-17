@@ -89,6 +89,11 @@ class User implements  UserInterface
      */
     private $annonce;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $pro;
+
     public function __construct()
     {
         $this->annonce = new ArrayCollection();
@@ -240,6 +245,18 @@ class User implements  UserInterface
                 $annonce->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPro(): ?int
+    {
+        return $this->pro;
+    }
+
+    public function setPro(int $pro): self
+    {
+        $this->pro = $pro;
 
         return $this;
     }

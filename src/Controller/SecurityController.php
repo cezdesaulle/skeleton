@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Pro;
 use App\Entity\User;
+use App\Form\ProType;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,6 +30,7 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()):
 
+            $user->setPro(0);
             $mdp = $encoder->encodePassword($user, $request->request->get('registration')['password']);
             $user->setPassword($mdp);
             $manager->persist($user);
@@ -50,18 +53,19 @@ class SecurityController extends AbstractController
     public function registrationPro(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
     {
 
-        $user = new User();
+        $pro = new Pro();
 
-        $form = $this->createForm(RegistrationType::class, $user);
+        $form = $this->createForm(ProType::class, $pro);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()):
 
+            $user=$this->getUser();
+            $user->setPro(1);
             $user->setRoles(['ROLE_PRO']);
-            $mdp = $encoder->encodePassword($user, $request->request->get('registration')['password']);
-            $user->setPassword($mdp);
-            $manager->persist($user);
+
+            $manager->persist($pro);
             $manager->flush();
             $this->addFlash('success', 'Félicitation! votre inscription s\'est bien déroulée. Connectez vous à présent');
 
