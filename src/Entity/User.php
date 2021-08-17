@@ -56,10 +56,7 @@ class User implements  UserInterface
      */
     private $roles=["ROLE_USER"];
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $birthdate;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -87,10 +84,16 @@ class User implements  UserInterface
      */
     private $reset;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Annonce::class, mappedBy="user")
+     */
+    private $annonce;
+
     public function __construct()
     {
-        $this->commandes = new ArrayCollection();
+        $this->annonce = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -133,17 +136,6 @@ class User implements  UserInterface
         return $this;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
-    {
-        return $this->birthdate;
-    }
-
-    public function setBirthdate(?\DateTimeInterface $birthdate): self
-    {
-        $this->birthdate = $birthdate;
-
-        return $this;
-    }
 
     public function getAdress(): ?string
     {
@@ -220,6 +212,36 @@ class User implements  UserInterface
     public function __call($name, $arguments)
     {
         // TODO: Implement @method string getUserIdentifier()
+    }
+
+    /**
+     * @return Collection|Annonce[]
+     */
+    public function getAnnonce(): Collection
+    {
+        return $this->annonce;
+    }
+
+    public function addAnnonce(Annonce $annonce): self
+    {
+        if (!$this->annonce->contains($annonce)) {
+            $this->annonce[] = $annonce;
+            $annonce->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnonce(Annonce $annonce): self
+    {
+        if ($this->annonce->removeElement($annonce)) {
+            // set the owning side to null (unless already changed)
+            if ($annonce->getUser() === $this) {
+                $annonce->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 
